@@ -1,0 +1,33 @@
+<div class="card mt-4 mb-4">
+    <div class="card-header">
+        <h1>{{ blog.title }}</h1>
+        <h4 class="text-muted">作者：<strong>{{ author.username }}</strong></h4>  <!-- 显示作者的名称 -->
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ blog.content|markdown|safe}}</p>
+        <!-- 添加点赞和反赞的按钮 -->
+        <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-primary mr-2">
+                    <i class="fa fa-thumbs-up"></i>  {{ upvotes }}  <!-- 显示总赞数 -->
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-thumbs-down"></i>  {{ downvotes }}  <!-- 显示总反赞数 -->
+            </form>
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-4 mb-4">类别</h2>
+<div>
+    {% set colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'] %}
+    {% for category in categories %}
+    <span class="badge badge-{{ colors[loop.index0 % colors|length] }}">{{ category.name }}</span>
+    {% endfor %}
+</div>
+
+<h2 class="mt-4 mb-4">标签</h2>
+<div>
+    {% for tag in tags %}
+    <span class="badge badge-{{ colors[loop.index0 % colors|length] }}">{{ tag.name }}</span>
+    {% endfor %}
+</div>

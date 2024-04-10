@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>评论管理</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% include './admin/navbar.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">评论管理</h1>
+        <p>所有评论总数：{{ comment_count }}</p>
+
+        <!-- 添加一个 canvas 元素来放置图表 -->
+        <canvas id="chart"></canvas>
+
+        {% for username, user_comments in user_comments_dict.items() %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2>{{ username }}的评论</h2>
+                <p>评论总数：{{ user_comment_counts[username] }}</p>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>评论内容</th>
+                        <th>博客标题</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for comment in user_comments %}
+                    <tr>
+                        <td>{{ comment.content }}</td>
+                        <td><a href="{{ url_for('show_blog', blog_id=comment.blog_id) }}">{{ comment.title }}</a></td>
+                        <td>
+                            <form action="{{ url_for('admin_delete_comment', comment_id=comment.comment_id) }}" method="post" style="display: inline;">
+                                <input type="submit" class="btn btn-danger btn-sm" value="删除评论">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 引入 Bootstrap JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- 创建图表 -->
+        <script>
+        var ctx = document.getElementById('chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ sorted_usernames|map(attribute='0')|list|tojson }},  // 用户名
+                datasets: [{
+                    label: '评论数',
+                    data: {{ sorted_usernames|map(attribute='1')|list|tojson }},  // 评论数
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',  // 柱状图的颜色
+                    borderColor: 'rgba(75, 192, 192, 1)',  // 柱状图边框的颜色
+                    borderWidth: 1  // 柱状图边框的宽度
+                }]
+            },
+            options: {
+            responsive: true,  // 让图表在响应式环境中工作
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            animation: {
+                duration: 1000,  // 动画持续时间
+                easing: 'easeOutBounce'  // 动画效果
+            },
+            title: {
+                display: true,
+                text: '用户的评论数',  // 图表标题
+                fontColor: '#333',  // 标题颜色
+                fontSize: 20  // 标题字体大小
+            },
+            legend: {
+                display: false  // 不显示图例
+            }
+        }
+        });
+        </script>
+
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container" style="text-align: center;">
+                <span class="text-muted">博客信息管理系统</span>
+            </div>
+        </footer>
+    </body>
+</html>

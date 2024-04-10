@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ blog.title }}</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    {% include './blog/navbar.html' %}
+    <div class="container">
+        {% include './blog/blog_content.html' %}
+        {% include './blog/comments.html' %}
+    </div>
+    
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- 引入自定义的 JavaScript -->
+    <script>
+    $(document).ready(function() {
+        $('.comment').click(function(event) {
+            event.stopPropagation();  // 阻止事件冒泡
+            $(this).find('.reply-form').show();
+        });
+
+        $(document).click(function() {
+            $('.reply-form').hide();
+        });
+
+        // 处理点赞按钮的点击事件
+        $('#upvote-button').click(function() {
+            $.post("{{ url_for('blog_upvote', blog_id=blog.blog_id) }}");
+        });
+
+        // 处理反赞按钮的点击事件
+        $('#downvote-button').click(function() {
+            $.post("{{ url_for('blog_downvote', blog_id=blog.blog_id) }}");
+        });
+    });
+    </script>
+    {% include './blog/error_modal.html' %}
+</body>
+</html>

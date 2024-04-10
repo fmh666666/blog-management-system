@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('home') }}">博客平台</a>
+    <!-- 添加一个搜索框 -->
+    <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method="get">
+        <input class="form-control mr-sm-2" type="search" placeholder="搜索博客..." aria-label="Search" name="keyword">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+    </form>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            {% if 'user_id' in session %}
+            <li class="nav-item">
+                <span class="navbar-text">欢迎，{{ session['username'] }}</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('my_blogs') }}">我的博客仓库</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('new_blog') }}">发布博客</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">退出登录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}">切换用户</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}">登录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('register') }}">注册</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_login') }}">管理员登录</a>
+            </li>
+        </ul>
+    </div>
+</nav>

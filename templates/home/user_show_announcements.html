@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>所有公告</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include './home/navbar.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">所有公告</h1>
+
+        <table class="table">
+            <tr>
+                <th>标题</th>
+                <th>发布日期</th>
+                <th>管理员</th>
+            </tr>
+            {% for announcement in announcements %}
+            <tr>
+                <td><a href="{{ url_for('user_show_announcement', announcement_id=announcement.announcement_id) }}">{{ announcement.title }}</a></td>
+                <td>{{ announcement.publish_date }}</td>
+                <td>{{ announcement.admin_username }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">目前没有公告。</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container" style="text-align: center;">
+            <span class="text-muted">博客信息管理系统</span>
+        </div>
+    </footer>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

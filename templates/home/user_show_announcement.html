@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>公告</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include './home/navbar.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">{{ announcement.title }}</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ announcement.title }}</h5>
+                <p class="card-text">{{ announcement.content | markdown | safe }}</p>  <!-- 使用 markdown 过滤器 -->
+                <p class="card-text"><small class="text-muted">发布日期：{{ announcement.publish_date }}</small></p>
+                <p class="card-text"><small class="text-muted">管理员：{{ announcement.admin_username }}</small></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container" style="text-align: center;">
+            <span class="text-muted">博客信息管理系统</span>
+        </div>
+    </footer>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

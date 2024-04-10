@@ -1,0 +1,16 @@
+<h2 class="mt-4 mb-4">评论</h2>
+<ul>
+    {% for comment in comments %}
+    <li class="comment">
+        <strong>{{ comment.commenter.username }}</strong>  <!-- 显示评论者的用户名 -->
+        {% if comment.commenter_id == blog.author_id %}
+        (作者)  <!-- 如果评论者是作者，就显示 "作者" -->
+        {% endif %}
+        {% if comment.parent_id %}
+        回复
+        <strong>{{ comment.parent.commenter.username }}</strong>  <!-- 显示被回复的评论的评论者的用户名 -->
+        {% endif %}
+        :{{ comment.content }}
+    </li>
+    {% endfor %}
+</ul>

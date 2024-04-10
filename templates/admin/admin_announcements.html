@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>公告管理</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include './admin/navbar.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">公告管理</h1>
+        <p>公告总数：{{ announcement_count }}</p>
+
+        <table class="table">
+            <tr>
+                <th>标题</th>
+                <th>发布日期</th>
+                <th>管理员</th>
+                <th>操作</th>
+            </tr>
+            {% for announcement in announcements %}
+            <tr>
+                <td><a href="{{ url_for('show_announcement', announcement_id=announcement.announcement_id) }}">{{ announcement.title }}</a></td>
+                <td>{{ announcement.publish_date }}</td>
+                <td>{{ announcement.admin_username }}</td>
+                <td>
+                    <a href="{{ url_for('edit_announcement', announcement_id=announcement.announcement_id) }}" class="btn btn-primary btn-sm">编辑</a>
+                    <form action="{{ url_for('admin_announcement_delete', announcement_id=announcement.announcement_id) }}" method="post" style="display: inline;">
+                        <input type="submit" class="btn btn-danger btn-sm" value="删除公告">
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">目前没有公告。</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container" style="text-align: center;">
+            <span class="text-muted">博客信息管理系统</span>
+        </div>
+    </footer>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

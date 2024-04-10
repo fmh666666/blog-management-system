@@ -1,0 +1,67 @@
+<h2 class="mt-4 mb-4">所有的标签</h2>
+<div class="row">
+    {% for tag in tags %}
+    <div class="col-md-6 tag-card" style="display: none;">  <!-- 添加一个类名，并设置初始状态为隐藏 -->
+        <div class="card mt-4 mb-4">
+            <div class="card-header">
+                <h5>{{ tag.name }}</h5>  <!-- 修改标题标签为 h5 -->
+            </div>
+            <div class="card-body">
+                <div class="row" id="tag-list">
+                    {% for blog in tag.blogs %}
+                    <div class="col-md-6 blog-card" style="display: none;">  <!-- 修改列宽为 6，使每行可以显示两个博客，并添加一个类名，并设置初始状态为隐藏 -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6><a href="{{ url_for('blog', blog_id=blog.blog_id) }}">{{ blog.title }}</a></h6>  <!-- 修改标题标签为 h6 -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-outline-primary load-more-blogs">查看更多</button>
+                <button class="btn btn-outline-primary load-less-blogs" style="display: none;">收回</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    // 页面加载时立即隐藏超过4个的标签和博客
+    var allTags = document.querySelectorAll('.tag-card');
+    for (var i = 0; i < 4 && i < allTags.length; i++) {
+        allTags[i].style.display = 'block';
+        var blogCards = allTags[i].querySelectorAll('.blog-card');
+        for (var j = 0; j < 4 && j < blogCards.length; j++) {
+            blogCards[j].style.display = 'block';
+        }
+    }
+
+    var loadMoreBlogsButtons = document.querySelectorAll('.load-more-blogs');
+    loadMoreBlogsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var blogCards = this.parentElement.querySelectorAll('.blog-card');
+            var hiddenBlogs = Array.from(blogCards).filter(blog => blog.style.display === 'none');
+            for (var i = 0; i < 4 && i < hiddenBlogs.length; i++) {
+                hiddenBlogs[i].style.display = 'block';
+            }
+            if (hiddenBlogs.length <= 4) {
+                this.style.display = 'none';
+            }
+            this.nextElementSibling.style.display = 'block';
+        });
+    });
+
+    var loadLessBlogsButtons = document.querySelectorAll('.load-less-blogs');
+    loadLessBlogsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var blogCards = this.parentElement.querySelectorAll('.blog-card');
+            var visibleBlogs = Array.from(blogCards).filter(blog => blog.style.display !== 'none');
+            for (var i = visibleBlogs.length - 1; i >= 4; i--) {
+                visibleBlogs[i].style.display = 'none';
+            }
+            this.style.display = 'none';
+            this.previousElementSibling.style.display = 'block';
+        });
+    });
+</script>

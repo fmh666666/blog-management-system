@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>欢迎来到博客平台</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /* 添加一个 CSS 类来设置图片容器的高度和溢出行为 */
+        .image-container {
+            height: 200px;
+            overflow-y: auto;  /* 设置垂直滚动 */
+        }
+    </style>
+</head>
+<body>
+    {% include './home/navbar.html' %}
+    <div class="container">
+        <!-- 添加一个图片容器 -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='img/1.png') }}" alt="博客图片" class="img-fluid rounded mb-4">
+        </div>
+        <h1 class="mt-4 mb-4">欢迎来到博客平台</h1>
+        <p>在这里，你可以阅读、发布和评论博客。</p>
+
+        <!-- 公告部分 -->
+        {% include './home/home_announcement.html' %}
+
+        {% include './home/all_blogs.html' %}
+        {% include './home/categorys.html' %}
+        {% include './home/tags.html' %}
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container" style="text-align: center;">
+            <span class="text-muted">博客信息管理系统</span>
+        </div>
+    </footer>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

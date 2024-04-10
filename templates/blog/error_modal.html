@@ -1,0 +1,29 @@
+<!-- 添加一个模态框来显示错误信息 -->
+<div class="modal" tabindex="-1" role="dialog" id="errorModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-dark">
+            <div class="modal-header bg-light text-dark">
+                <h5 class="modal-title">错误</h5>
+                <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>{{ error }}</p>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 在页面加载完成后，如果有错误信息，就显示模态框 -->
+<script>
+    $(document).ready(function() {
+        var error = "{{ error }}";
+        if(error){
+            $('#errorModal').modal('show');
+        }
+    });
+</script>

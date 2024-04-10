@@ -1,0 +1,16 @@
+<h2 class="mt-4 mb-4">公告</h2>
+{% if announcements %}
+{% set announcement = announcements[0][0] %}
+{% set author = announcements[0][1] %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">{{ announcement.title }}</h5>
+        <p class="card-text">{{ announcement.content|markdown|safe }}</p>
+        <p class="card-text"><small class="text-muted">发布日期：{{ announcement.publish_date }}</small></p>
+        <p class="card-text"><small class="text-muted">作者：{{ author }}</small></p>
+    </div>
+</div>
+<a href="{{ url_for('user_show_announcements') }}" class="btn btn-outline-primary">查看更多公告</a>
+{% else %}
+<p>目前没有公告。</p>
+{% endif %}

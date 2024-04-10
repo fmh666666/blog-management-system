@@ -1,0 +1,35 @@
+<h2 class="mt-4 mb-4">评论</h2>
+<ul>
+    {% for comment in comments %}
+    <li class="comment">
+        <strong>{{ comment.commenter.username }}</strong>  <!-- 显示评论者的用户名 -->
+        {% if comment.commenter_id == blog.author_id %}
+        (作者)  <!-- 如果评论者是作者，就显示 "作者" -->
+        {% endif %}
+        {% if comment.parent_id %}
+        回复
+        <strong>{{ comment.parent.commenter.username }}</strong>  <!-- 显示被回复的评论的评论者的用户名 -->
+        {% endif %}
+        :{{ comment.content }}
+        
+        <!-- 添加回复表单 -->
+        <form class="reply-form" action="{{ url_for('new_comment', blog_id=blog.blog_id) }}" method="post" style="display: none;">
+            <input type="hidden" name="parent_id" value="{{ comment.comment_id }}">
+            <div class="form-group">
+                <label for="content">回复内容：</label>
+                <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- 添加评论的表单 -->
+<form action="{{ url_for('new_comment', blog_id=blog.blog_id) }}" method="post">
+    <div class="form-group">
+        <label for="content">添加评论：</label>
+        <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">提交</button>
+</form>

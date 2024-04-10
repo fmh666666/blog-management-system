@@ -1,0 +1,89 @@
+<h2 class="mt-4 mb-4">所有的类别</h2>
+<div class="row">
+    {% for category in categories %}
+    <div class="col-md-6 category-card" style="display: none;">  <!-- 添加一个类名，并设置初始状态为隐藏 -->
+        <div class="card mt-4 mb-4">
+            <div class="card-header">
+                <h5>{{ category.name }}</h5>  <!-- 修改标题标签为 h5 -->
+            </div>
+            <div class="card-body">
+                <div class="row" id="category-list">
+                    {% for blog in category.blogs %}
+                    <div class="col-md-6 blog-card" style="display: none;">  <!-- 修改列宽为 6，使每行可以显示两个博客，并添加一个类名，并设置初始状态为隐藏 -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6><a href="{{ url_for('blog', blog_id=blog.blog_id) }}">{{ blog.title }}</a></h6>  <!-- 修改标题标签为 h6 -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-outline-primary load-more-blogs">查看更多</button>
+                <button class="btn btn-outline-primary load-less-blogs" style="display: none;">收回</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<button id="load-more-categories" class="btn btn-outline-primary">查看更多</button>
+<button id="load-less-categories" class="btn btn-outline-primary" style="display: none;">收回</button>
+
+<script>
+    // 页面加载时立即隐藏超过4个的类别和博客
+    var allCategories = document.querySelectorAll('.category-card');
+    for (var i = 0; i < 4 && i < allCategories.length; i++) {
+        allCategories[i].style.display = 'block';
+        var blogCards = allCategories[i].querySelectorAll('.blog-card');
+        for (var j = 0; j < 4 && j < blogCards.length; j++) {
+            blogCards[j].style.display = 'block';
+        }
+    }
+
+    document.getElementById('load-more-categories').addEventListener('click', function() {
+        var hiddenCategories = Array.from(allCategories).filter(category => category.style.display === 'none');
+        for (var i = 0; i < 4 && i < hiddenCategories.length; i++) {
+            hiddenCategories[i].style.display = 'block';
+        }
+        if (hiddenCategories.length <= 4) {
+            this.style.display = 'none';
+        }
+        document.getElementById('load-less-categories').style.display = 'block';
+    });
+
+    document.getElementById('load-less-categories').addEventListener('click', function() {
+        var visibleCategories = Array.from(allCategories).filter(category => category.style.display !== 'none');
+        for (var i = visibleCategories.length - 1; i >= 4; i--) {
+            visibleCategories[i].style.display = 'none';
+        }
+        this.style.display = 'none';
+        document.getElementById('load-more-categories').style.display = 'block';
+    });
+
+    var loadMoreBlogsButtons = document.querySelectorAll('.load-more-blogs');
+    loadMoreBlogsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var blogCards = this.parentElement.querySelectorAll('.blog-card');
+            var hiddenBlogs = Array.from(blogCards).filter(blog => blog.style.display === 'none');
+            for (var i = 0; i < 4 && i < hiddenBlogs.length; i++) {
+                hiddenBlogs[i].style.display = 'block';
+            }
+            if (hiddenBlogs.length <= 4) {
+                this.style.display = 'none';
+            }
+            this.nextElementSibling.style.display = 'block';
+        });
+    });
+
+    var loadLessBlogsButtons = document.querySelectorAll('.load-less-blogs');
+    loadLessBlogsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var blogCards = this.parentElement.querySelectorAll('.blog-card');
+            var visibleBlogs = Array.from(blogCards).filter(blog => blog.style.display !== 'none');
+            for (var i = visibleBlogs.length - 1; i >= 4; i--) {
+                visibleBlogs[i].style.display = 'none';
+            }
+            this.style.display = 'none';
+            this.previousElementSibling.style.display = 'block';
+        });
+    });
+</script>

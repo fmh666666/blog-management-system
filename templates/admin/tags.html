@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>标签管理</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% include './admin/navbar.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">标签管理</h1>
+        <p>标签总数：{{ tag_count }}</p>
+
+        <!-- 添加一个 canvas 元素来放置图表 -->
+        <canvas id="chart"></canvas>
+
+        {% for tag_name, tag_info in tags_with_counts.items() %}
+        {% if tag_info['tag_blogs']|length > 0 %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2>{{ tag_name }}
+                    <form action="{{ url_for('admin_delete_tag', tag_id=tag_info['tag_blogs'][0].tag_id) }}" method="post" style="display: inline;">
+                        <input type="submit" class="btn btn-danger btn-sm" value="删除标签">
+                    </form>
+                </h2>
+                <p>博客总数：{{ tag_info['blog_count'] }}</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for blog in tag_info['tag_blogs'] %}
+                    <div class="col-md-4">
+                        <a href="{{ url_for('show_blog', blog_id=blog.blog_id) }}">{{ blog.title }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <p>目前没有标签。</p>
+        {% endfor %}
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container" style="text-align: center;">
+            <span class="text-muted">博客信息管理系统</span>
+        </div>
+    </footer>
+
+    <!-- 引入 Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- 创建图表 -->
+    <script>
+    var ctx = document.getElementById('chart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for tag_name, tag_info in tags_with_counts.items() %}'{{ tag_name }}',{% endfor %}],  // 标签名称
+            datasets: [{
+                label: '博客数',
+                data: [{% for tag_name, tag_info in tags_with_counts.items() %}{{ tag_info['blog_count'] }},{% endfor %}],  // 博客数
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',  // 柱状图的颜色
+                borderColor: 'rgba(75, 192, 192, 1)',  // 柱状图边框的颜色
+                borderWidth: 1,  // 柱状图边框的宽度
+                hoverBackgroundColor: 'rgba(75, 192, 192, 0.4)',  // 鼠标悬停时的颜色
+                hoverBorderColor: 'rgba(75, 192, 192, 1)'  // 鼠标悬停时的边框颜色
+            }]
+        },
+        options: {
+            responsive: true,  // 让图表在响应式环境中工作
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            animation: {
+                duration: 1000,  // 动画持续时间
+                easing: 'easeOutBounce'  // 动画效果
+            },
+            title: {
+                display: true,
+                text: '标签的博客数',  // 图表标题
+                fontColor: '#333',  // 标题颜色
+                fontSize: 20  // 标题字体大小
+            },
+            legend: {
+                display: false  // 不显示图例
+            }
+        }
+    });
+    </script>
+</body>
+</html>

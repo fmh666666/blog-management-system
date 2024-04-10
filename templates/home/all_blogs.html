@@ -1,0 +1,40 @@
+<h2 class="mt-4 mb-4">所有的博客</h2>
+<div class="row" id="blog-list">
+    {% for blog in blogs %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <a href="{{ url_for('blog', blog_id=blog.blog_id) }}"><h5>{{ blog.title }}</h5></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<button id="load-more" class="btn btn-outline-primary">加载更多</button>
+<button id="load-less" class="btn btn-outline-primary" style="display: none;">收回</button>
+
+<script>
+    // 页面加载时立即隐藏超过9个的博客
+    var allBlogs = document.querySelectorAll('#blog-list .col-md-4');
+    for (var i = 9; i < allBlogs.length; i++) {
+        allBlogs[i].style.display = 'none';
+    }
+
+    document.getElementById('load-more').addEventListener('click', function() {
+        var hiddenBlogs = Array.from(allBlogs).filter(blog => blog.style.display === 'none');
+        for (var i = 0; i < hiddenBlogs.length; i++) {
+            hiddenBlogs[i].style.display = 'block';
+        }
+        this.style.display = 'none';
+        document.getElementById('load-less').style.display = 'block';
+    });
+
+    document.getElementById('load-less').addEventListener('click', function() {
+        var visibleBlogs = Array.from(allBlogs).filter(blog => blog.style.display !== 'none');
+        for (var i = visibleBlogs.length - 1; i >= 9; i--) {
+            visibleBlogs[i].style.display = 'none';
+        }
+        this.style.display = 'none';
+        document.getElementById('load-more').style.display = 'block';
+    });
+</script>
