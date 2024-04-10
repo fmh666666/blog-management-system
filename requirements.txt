@@ -1,0 +1,7 @@
+langchain
+langchain_community
+transformers
+modelscope
+pandas
+streamlit
+streamlit-chat
